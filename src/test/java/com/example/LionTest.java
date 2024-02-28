@@ -2,29 +2,34 @@ package com.example;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.MockitoJUnitRunner;
+
+import java.util.List;
 
 import static org.junit.Assert.*;
 
-@RunWith(Parameterized.class)
+@RunWith(MockitoJUnitRunner.class)
 public class LionTest {
-    String sex;
-    boolean expectedHasMane;
+    @Mock
+    Feline feline;
 
-    public LionTest(String sex, boolean hasMane){
-        this.sex = sex;
-        this.expectedHasMane = hasMane;
-    }
-    @Parameterized.Parameters
-    public static Object[] LionsSex() {
-        return new Object[][]{
-                {"Самец", true},
-                {"Самка", false}
-        };
-    }
     @Test
-    public void hasManeTest() throws Exception {
-        Lion lion = new Lion(sex);
-        assertEquals(lion.doesHaveMane(), expectedHasMane);
+    public void getKittens() {
+        Lion lion = new Lion(feline);
+        Mockito.when(feline.getKittens()).thenReturn(1);
+        int actual = lion.getKittens();
+        int expected = 1;
+        assertEquals(expected,actual);
+    }
+
+    @Test
+    public void getFood() throws Exception {
+        Lion lion = new Lion(feline);
+        Mockito.when(feline.getFood("Хищник")).thenReturn(List.of("Животные", "Птицы", "Рыба"));
+        List<String> expected = List.of("Животные", "Птицы", "Рыба");
+        List<String> actual = lion.getFood();
+        assertEquals(expected,actual);
     }
 }
